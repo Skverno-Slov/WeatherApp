@@ -21,13 +21,17 @@ namespace WeatherApp.ViewModels
         {
             _weatherService = weatherService;
             
+            //Запуск асинхронной задачи
             InitializationTask = Task.Run(async () =>
             {
                 
             });
         }
 
-
+        /// <summary>
+        /// Задача инициализации, необходима для 
+        /// запуска асинхронной операции в конструкторе 
+        /// </summary>
         TaskNotifier? _initializationTask;
         public Task? InitializationTask
         {

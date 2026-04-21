@@ -9,8 +9,14 @@ using WeatherApp.Models;
 
 namespace WeatherApp.Services
 {
+    /// <summary>
+    /// Сервис для получения информации о погоде
+    /// </summary>
     public class WeatherService
     {
+        /// <summary>
+        /// Ключ для запросов к погодному API
+        /// </summary>
         private readonly string _apiKey;
 
         public WeatherService()
@@ -23,6 +29,11 @@ namespace WeatherApp.Services
             _apiKey = key;
         }
 
+        /// <summary>
+        /// Получение погоды в городе по наименованию
+        /// </summary>
+        /// <param name="cityName">название города</param>
+        /// <returns>информация о погоде в городе</returns>
         public async Task<Weather> GetWeatherByCityNameAsync(string cityName)
         {
             // Опция, необходимая для корректной десериализации данных JSON из openweathermap
@@ -32,16 +43,22 @@ namespace WeatherApp.Services
             };
             options.Converters.Add(new WeatherJsonConverter());
 
-            // Вызовите API погоды, используя HttpClient
+            // Вызовите API погоды, используя HttpClient. Подробнее: https://openweathermap.org/current#name
 
-            // Десериализуйте ответ в объект Weather
+            // Десериализуйте ответ в объект Weather, используйте в методе опцию, указанную выше
 
             // Верните объект Weather
 
-            throw new NotImplementedException();
+            throw new NotImplementedException(); //Уберите после реализации кода
         }
 
-        public async Task<Weather> GetWeatherByGeoAsync(double longitude, double latitude)
+        /// <summary>
+        /// Получение погоды в городе по координатам
+        /// </summary>
+        /// <param name="latitude">Широта</param>
+        /// <param name="longitude">Долгота</param>
+        /// <returns>информация о погоде в городе</returns>
+        public async Task<Weather> GetWeatherByGeoAsync(double latitude, double longitude)
         {
             // Опция, необходимая для корректной десериализации данных JSON из openweathermap
             var options = new JsonSerializerOptions
@@ -50,31 +67,37 @@ namespace WeatherApp.Services
             };
             options.Converters.Add(new WeatherJsonConverter());
 
-            // Вызовите API погоды, используя HttpClient
+            // Вызовите API погоды, используя HttpClient. Подробнее: https://openweathermap.org/current
 
-            // Десериализуйте ответ в объект Weather
+            // Десериализуйте ответ в объект Weather, используйте в методе опцию, указанную выше
 
             // Верните объект Weather
 
-            throw new NotImplementedException();
+            throw new NotImplementedException(); //Уберите после реализации кода
         }
 
+        /// <summary>
+        /// Получение городов по названию
+        /// </summary>
+        /// <param name="cityName">название города</param>
+        /// <param name="limit">максимум городов, который может вернуть метод</param>
+        /// <returns>список городов с координатами</returns>
         public async Task<List<City>> GetGeoByCityNameAsync(string cityName, int limit=1)
         {
-            // Опция, необходимая для корректной десериализации данных JSON из openweathermap
+            // Опция, необходимая для корректной десериализации данных JSON из openweathermap 
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
             options.Converters.Add(new CityJsonConverter());
 
-            // Вызовите географическое API, используя HttpClient
+            // Вызовите географическое API, используя HttpClient. Подробнее: https://openweathermap.org/api/geocoding-api 
 
-            // Десериализуйте ответ в список объектов City
+            // Десериализуйте ответ в список объектов City, используйте в методе опцию, указанную выше
 
             // Верните список City
 
-            throw new NotImplementedException();
+            throw new NotImplementedException(); //Уберите после реализации кода
         }
     }
 }

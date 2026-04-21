@@ -8,6 +8,7 @@
              x:Class="WeatherApp.Views.WeatherView"
              x:DataType="vm:WeatherViewModel">
     <UserControl.DataTemplates>
+        <!--Шаблон для карточки погоды-->
 		<DataTemplate DataType="m:Weather">
 			
 		</DataTemplate>
