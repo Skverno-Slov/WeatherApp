@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -18,6 +20,7 @@ namespace WeatherApp.Services
         /// Ключ для запросов к погодному API
         /// </summary>
         private readonly string _apiKey;
+        private readonly HttpClient _httpClient;
 
         public WeatherService()
         {
@@ -27,6 +30,9 @@ namespace WeatherApp.Services
                 throw new Exception("Weather API key not found in appsettings.json");
             }
             _apiKey = key;
+
+            _httpClient = new HttpClient();
+            //_httpClient.BaseAddress = new Uri("http://openweathermap.org");
         }
 
         /// <summary>
@@ -36,20 +42,17 @@ namespace WeatherApp.Services
         /// <returns>информация о погоде в городе</returns>
         public async Task<Weather> GetWeatherByCityNameAsync(string cityName)
         {
-            // Опция, необходимая для корректной десериализации данных JSON из openweathermap
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
             options.Converters.Add(new WeatherJsonConverter());
 
-            // Вызовите API погоды, используя HttpClient. Подробнее: https://openweathermap.org/current#name
+            //using var json = await _httpClient.GetStreamAsync($"data/2.5/weather?q={cityName}&appid={_apiKey}&lang=ru");
 
-            // Десериализуйте ответ в объект Weather, используйте в методе опцию, указанную выше
+            //return await JsonSerializer.DeserializeAsync<Weather>(json, options);
 
-            // Верните объект Weather
-
-            throw new NotImplementedException(); //Уберите после реализации кода
+            return await _httpClient.GetFromJsonAsync<Weather>($"http://api.openweathermap.org/data/2.5/weather?q={cityName}&appid={_apiKey}&lang=ru", options);
         }
 
         /// <summary>
@@ -60,20 +63,13 @@ namespace WeatherApp.Services
         /// <returns>информация о погоде в городе</returns>
         public async Task<Weather> GetWeatherByGeoAsync(double latitude, double longitude)
         {
-            // Опция, необходимая для корректной десериализации данных JSON из openweathermap
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
             options.Converters.Add(new WeatherJsonConverter());
-
-            // Вызовите API погоды, используя HttpClient. Подробнее: https://openweathermap.org/current
-
-            // Десериализуйте ответ в объект Weather, используйте в методе опцию, указанную выше
-
-            // Верните объект Weather
-
-            throw new NotImplementedException(); //Уберите после реализации кода
+            
+            return await _httpClient.GetFromJsonAsync<Weather>($"data/2.5/weather?lat={latitude}&lon={longitude}&appid={_apiKey}&lang=ru", options);
         }
 
         /// <summary>
@@ -84,20 +80,13 @@ namespace WeatherApp.Services
         /// <returns>список городов с координатами</returns>
         public async Task<List<City>> GetGeoByCityNameAsync(string cityName, int limit=1)
         {
-            // Опция, необходимая для корректной десериализации данных JSON из openweathermap 
             var options = new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             };
             options.Converters.Add(new CityJsonConverter());
 
-            // Вызовите географическое API, используя HttpClient. Подробнее: https://openweathermap.org/api/geocoding-api 
-
-            // Десериализуйте ответ в список объектов City, используйте в методе опцию, указанную выше
-
-            // Верните список City
-
-            throw new NotImplementedException(); //Уберите после реализации кода
+            return await _httpClient.GetFromJsonAsync<List<City>>($"geo/1.0/direct?q={cityName}&limit={limit}&appid={_apiKey}&lang=ru", options);
         }
     }
 }

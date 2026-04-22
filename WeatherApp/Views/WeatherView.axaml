@@ -1,21 +1,84 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:WeatherApp.ViewModels"
 			 xmlns:m="clr-namespace:WeatherApp.Models"
+             xmlns:convertors="clr-namespace:WeatherApp.Convertors"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="WeatherApp.Views.WeatherView"
              x:DataType="vm:WeatherViewModel">
+  <UserControl.Resources>
+	<convertors:TemperqtureConverter x:Key="TemperqtureConverter"/>
+	<convertors:PreasureConvertor x:Key="PreasureConvertor"/>
+	<convertors:WindDirrectionConvertor x:Key="WindDirrectionConvertor"/>
+  </UserControl.Resources>
+
     <UserControl.DataTemplates>
-        <!--Шаблон для карточки погоды-->
 		<DataTemplate DataType="m:Weather">
-			
+			<StackPanel Background="LightGray">
+				<TextBlock Margin="5">
+                    <Run Text="Город: "/>
+					<Run Text="{Binding Path=City.Name}"/>
+                </TextBlock>
+                <TextBlock Margin="5">
+                    <Run Text="Описание: "/>
+					<Run Text="{Binding Description}"/>
+                </TextBlock>
+                <TextBlock Margin="5">
+                    <Run Text="Температура: "/>
+					<Run Text="{Binding Temperature, Converter={StaticResource TemperqtureConverter}, Mode=OneWay}"/>
+					<Run Text=" `C"/>
+                </TextBlock>
+                <TextBlock Margin="5">
+                    <Run Text="Ощущается как: "/>
+					<Run Text="{Binding FeelsAsTemperature, Converter={StaticResource TemperqtureConverter}, Mode=OneWay}"/>
+					<Run Text=" `C"/>
+                </TextBlock>
+                <TextBlock Margin="5">
+                    <Run Text="Влажность "/>
+					<Run Text="{Binding Humidity}"/>
+					<Run Text=" %"/>
+                </TextBlock>
+                <TextBlock Margin="5">
+                    <Run Text="Давление "/>
+					<Run Text="{Binding Pressure, Converter={StaticResource PreasureConvertor}, Mode=OneWay}"/>
+					<Run Text=" мм рт.столба"/>
+                </TextBlock>
+                <TextBlock Margin="5">
+                    <Run Text="Скорость ветра: "/>
+					<Run Text="{Binding WindSpeed}"/>
+					<Run Text=" м/с"/>
+                </TextBlock>
+                <TextBlock Margin="5">
+                    <Run Text="Направление ветра"/>
+					<Run Text="{Binding WindDirection, Converter={StaticResource WindDirrectionConvertor}, Mode=OneWay}"/>
+                </TextBlock>
+                <TextBlock Margin="5">
+                    <Run Text="Облачность: "/>
+					<Run Text="{Binding Cloudiness}"/>
+					<Run Text=" %"/>
+                </TextBlock>
+                <TextBlock Margin="5">
+                    <Run Text="Осадки(дождь): "/>
+					<Run Text="{Binding Rain}"/>
+					<Run Text=" мм"/>
+                </TextBlock>
+                <TextBlock Margin="5">
+                    <Run Text="Осадки(снег): "/>
+					<Run Text="{Binding Snow}"/>
+					<Run Text=" мм"/>
+                </TextBlock>
+                <Image Source="{Binding Image^}" Width="100" Height="100"/>
+            </StackPanel>
+            
 		</DataTemplate>
     </UserControl.DataTemplates>
 
-	<Grid>
-		
-		
-	</Grid>
+	<StackPanel>
+		<TextBox Watermark="Город" Text="{Binding City}"/>
+        <Button Content="Найти" Command="{Binding GetWeatherCommand}"/>
+
+        <ContentControl Content="{Binding Weather}"/>
+    </StackPanel>
 </UserControl>

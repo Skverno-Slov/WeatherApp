@@ -1,4 +1,5 @@
 ﻿using Avalonia.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,16 @@ namespace WeatherApp.ViewModels
     {
         WeatherService _weatherService;
 
+        [ObservableProperty]
+        string _city;
+
+        [ObservableProperty]
+        Weather _weather;
+
         public WeatherViewModel(WeatherService weatherService)
         {
             _weatherService = weatherService;
             
-            //Запуск асинхронной задачи
             InitializationTask = Task.Run(async () =>
             {
                 
@@ -37,6 +43,12 @@ namespace WeatherApp.ViewModels
         {
             get => _initializationTask;
             set => SetPropertyAndNotifyOnCompletion(ref _initializationTask, value);
+        }
+
+        [RelayCommand]
+        async Task GetWeather()
+        {
+            Weather = await _weatherService.GetWeatherByCityNameAsync(_city);
         }
     }
 }

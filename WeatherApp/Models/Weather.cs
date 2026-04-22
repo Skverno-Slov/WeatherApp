@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Avalonia.Media.Imaging;
+using System;
+using System.Threading.Tasks;
+using WeatherApp.Extensions;
 
 namespace WeatherApp.Models
 {
@@ -17,6 +20,7 @@ namespace WeatherApp.Models
         public double Rain { get; set; }
         public double Snow { get; set; }
         public DateTime DateTime { get; set; }
+        public Task<Bitmap?> Image => ImageHelper.LoadFromWeb(new Uri($"http://openweathermap.org/img/wn/{Icon}@2x.png"));
     }
 }
 
