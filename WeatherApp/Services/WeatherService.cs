@@ -32,7 +32,6 @@ namespace WeatherApp.Services
             _apiKey = key;
 
             _httpClient = new HttpClient();
-            //_httpClient.BaseAddress = new Uri("http://openweathermap.org");
         }
 
         /// <summary>
@@ -47,10 +46,6 @@ namespace WeatherApp.Services
                 PropertyNameCaseInsensitive = true
             };
             options.Converters.Add(new WeatherJsonConverter());
-
-            //using var json = await _httpClient.GetStreamAsync($"data/2.5/weather?q={cityName}&appid={_apiKey}&lang=ru");
-
-            //return await JsonSerializer.DeserializeAsync<Weather>(json, options);
 
             return await _httpClient.GetFromJsonAsync<Weather>($"http://api.openweathermap.org/data/2.5/weather?q={cityName}&appid={_apiKey}&lang=ru", options);
         }
@@ -69,7 +64,7 @@ namespace WeatherApp.Services
             };
             options.Converters.Add(new WeatherJsonConverter());
             
-            return await _httpClient.GetFromJsonAsync<Weather>($"data/2.5/weather?lat={latitude}&lon={longitude}&appid={_apiKey}&lang=ru", options);
+            return await _httpClient.GetFromJsonAsync<Weather>($"http://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={_apiKey}&lang=ru", options);
         }
 
         /// <summary>
@@ -86,7 +81,7 @@ namespace WeatherApp.Services
             };
             options.Converters.Add(new CityJsonConverter());
 
-            return await _httpClient.GetFromJsonAsync<List<City>>($"geo/1.0/direct?q={cityName}&limit={limit}&appid={_apiKey}&lang=ru", options);
+            return await _httpClient.GetFromJsonAsync<List<City>>($"http://api.openweathermap.org/geo/1.0/direct?q={cityName}&limit={limit}&appid={_apiKey}&lang=ru", options);
         }
     }
 }
